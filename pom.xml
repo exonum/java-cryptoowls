@@ -17,6 +17,7 @@
     <java.compiler.target>8</java.compiler.target>
     <junit.jupiter.version>5.5.1</junit.jupiter.version>
     <nativeLibPath>${env.EXONUM_HOME}/lib/native</nativeLibPath>
+    <protobuf.version>3.10.0</protobuf.version>
     <hamcrest.version>2.1</hamcrest.version>
     <mockito.version>3.0.0</mockito.version>
     <exonum.version>0.8.0</exonum.version>
@@ -104,6 +105,34 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java-util</artifactId>
+      <version>${protobuf.version}</version>
+    </dependency>
+
+    <!-- Explicitly define `provided` scope because it comes
+    as `compile` from 'protobuf-java-util' transitively -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Explicitly define `provided` scope because it comes
+    as `compile` from 'protobuf-java-util' transitively -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -117,6 +146,27 @@
           <source>${java.compiler.source}</source>
           <target>${java.compiler.target}</target>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <version>0.6.1</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>test-compile</goal>
+            </goals>
+            <configuration>
+              <protocArtifact>
+                com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+              </protocArtifact>
+              <protoTestSourceRoot>${project.basedir}/src/main/proto</protoTestSourceRoot>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
@@ -160,5 +210,13 @@
         </configuration>
       </plugin>
     </plugins>
+
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.6.2</version>
+      </extension>
+    </extensions>
   </build>
 </project>

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2018 The Exonum Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,20 +27,20 @@ import io.vertx.ext.web.Router;
 
 import java.util.Optional;
 
-public final class MyService extends AbstractService {
+public final class CryptoowlsService extends AbstractService {
 
   public static final short ID = 42;
   static final String NAME = "my-service";
   static final String INITIAL_SERVICE_CONFIGURATION = "{ \"version\": 0.1 }";
 
   @Inject
-  public MyService(TransactionConverter transactionConverter) {
+  public CryptoowlsService(TransactionConverter transactionConverter) {
     super(ID, NAME, transactionConverter);
   }
 
   @Override
   protected Schema createDataSchema(View view) {
-    return new MySchema(view);
+    return new CryptoowlsSchema(view);
   }
 
   @Override

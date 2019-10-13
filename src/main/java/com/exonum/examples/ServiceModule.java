@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2018 The Exonum Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +23,14 @@ import com.google.inject.Singleton;
 import org.pf4j.Extension;
 
 /**
- * A service module defines bindings required to create an instance of {@link MyService}.
+ * A service module defines bindings required to create an instance of {@link CryptoowlsService}.
  */
 @Extension
 public final class ServiceModule extends AbstractServiceModule {
 
   @Override
   protected void configure() {
-    bind(Service.class).to(MyService.class).in(Singleton.class);
+    bind(Service.class).to(CryptoowlsService.class).in(Singleton.class);
     bind(TransactionConverter.class).to(MyTransactionConverter.class);
   }
 }

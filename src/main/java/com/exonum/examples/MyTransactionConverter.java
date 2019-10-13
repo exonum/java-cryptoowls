@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2018 The Exonum Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ import com.exonum.binding.core.transaction.RawTransaction;
 import com.exonum.binding.core.service.TransactionConverter;
 
 /**
- * {@code MyTransactionConverter} converts raw transactions of {@link MyService}
+ * {@code MyTransactionConverter} converts raw transactions of {@link CryptoowlsService}
  * into {@linkplain Transaction executable transactions} of this service.
  */
 public final class MyTransactionConverter implements TransactionConverter {
