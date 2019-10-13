@@ -45,8 +45,6 @@ message User {
     uint64 balance = 3;
     // Reserved money that participate in the auction.
     uint64 reserved = 4;
-    // Time of the last issue of funds.
-    google.protobuf.Timestamp last_fillup = 5;
 }
 
 // Auction bid.

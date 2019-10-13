@@ -31,6 +31,6 @@ public final class ServiceModule extends AbstractServiceModule {
   @Override
   protected void configure() {
     bind(Service.class).to(CryptoowlsService.class).in(Singleton.class);
-    bind(TransactionConverter.class).to(MyTransactionConverter.class);
+    bind(TransactionConverter.class).to(CryptoowlsTransactionConverter.class);
   }
 }

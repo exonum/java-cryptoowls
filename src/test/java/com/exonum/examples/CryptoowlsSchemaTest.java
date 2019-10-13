@@ -1,6 +1,8 @@
 package com.exonum.examples;
 
+import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.core.storage.indices.ListIndex;
+import com.exonum.binding.core.storage.indices.MapIndex;
 import com.exonum.examples.cryptoowls.model.ModelProtos.*;
 import com.exonum.binding.testkit.TestKit;
 import com.exonum.binding.testkit.TestKitExtension;
@@ -20,9 +22,9 @@ public class CryptoowlsSchemaTest {
   }
 
   @Test
-  void returnsEmptyUsersListOnCreation(TestKit testKit) {
+  void returnsEmptyUsersMapOnCreation(TestKit testKit) {
     CryptoowlsSchema schema = new CryptoowlsSchema(testKit.getSnapshot());
-    ListIndex<User> users = schema.getUsers();
+    MapIndex<PublicKey, User> users = schema.getUsers();
     assert(users.isEmpty());
   }
 

@@ -16,13 +16,16 @@
 
 package com.exonum.examples;
 
+import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.common.hash.HashCode;
 import com.exonum.binding.common.serialization.StandardSerializers;
 import com.exonum.binding.core.service.Schema;
 import com.exonum.binding.core.storage.database.View;
 import com.exonum.binding.core.storage.indices.ListIndex;
 import com.exonum.binding.core.storage.indices.ListIndexProxy;
-import com.exonum.examples.cryptoowls.model.ModelProtos;
+import com.exonum.binding.core.storage.indices.MapIndex;
+import com.exonum.binding.core.storage.indices.MapIndexProxy;
+import com.exonum.examples.cryptoowls.model.ModelProtos.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,22 +51,22 @@ public final class CryptoowlsSchema implements Schema {
     return Collections.emptyList();
   }
 
-  public ListIndex<ModelProtos.CryptoOwl> getOwls() {
+  public ListIndex<CryptoOwl> getOwls() {
     String indexName = fullIndexName("owls");
     return ListIndexProxy.newInstance(indexName, view,
-        StandardSerializers.protobuf(ModelProtos.CryptoOwl.class));
+        StandardSerializers.protobuf(CryptoOwl.class));
   }
 
-  public ListIndex<ModelProtos.User> getUsers() {
+  public MapIndex<PublicKey, User> getUsers() {
     String indexName = fullIndexName("users");
-    return ListIndexProxy.newInstance(indexName, view,
-        StandardSerializers.protobuf(ModelProtos.User.class));
+    return MapIndexProxy.newInstance(indexName, view,
+        StandardSerializers.publicKey(), StandardSerializers.protobuf(User.class));
   }
 
-  public ListIndex<ModelProtos.Auction> getAuctions() {
+  public ListIndex<Auction> getAuctions() {
     String indexName = fullIndexName("auctions");
     return ListIndexProxy.newInstance(indexName, view,
-        StandardSerializers.protobuf(ModelProtos.Auction.class));
+        StandardSerializers.protobuf(Auction.class));
   }
 
   private String fullIndexName(String name) {
