@@ -39,12 +39,10 @@ public class CreateOwlTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
+    ZonedDateTime currentTime = Helpers.getCurrentTime(transactionContext.getFork());
     PublicKey owner = transactionContext.getAuthorPk();
     Schema schema = new Schema(transactionContext.getFork());
     HashCode uniqueHash = schema.getOwls().getIndexHash();
-
-    TimeSchema timeSchema = TimeSchema.newInstance(transactionContext.getFork());
-    ZonedDateTime currentTime = timeSchema.getTime().get();
 
     schema.closeAuctionsIfNeeded(currentTime);
 

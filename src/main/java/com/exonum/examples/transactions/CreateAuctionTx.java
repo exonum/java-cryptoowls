@@ -33,8 +33,7 @@ public class CreateAuctionTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
-    ZonedDateTime currentTime =
-        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
+    ZonedDateTime currentTime = Helpers.getCurrentTime(transactionContext.getFork());
     PublicKey owner = transactionContext.getAuthorPk();
     Schema schema = new Schema(transactionContext.getFork());
 

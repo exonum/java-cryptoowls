@@ -15,6 +15,7 @@ public final class ErrorCodes {
   static final byte BID_TOO_LOW = 11;
   static final byte NOT_AUTHORIZED = 12;
   static final byte SELF_BIDDING = 13;
+  public static final byte TIME_NOT_AVAILABLE = 14;
 
   private ErrorCodes() {}
 }

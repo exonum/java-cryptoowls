@@ -8,7 +8,7 @@ import com.exonum.binding.core.transaction.RawTransaction;
 import com.exonum.binding.core.transaction.Transaction;
 import com.exonum.binding.core.transaction.TransactionContext;
 import com.exonum.binding.core.transaction.TransactionExecutionException;
-import com.exonum.binding.time.TimeSchema;
+import com.exonum.examples.Helpers;
 import com.exonum.examples.Schema;
 import com.exonum.examples.cryptoowls.transactions.TransactionsProtos;
 import com.exonum.examples.model.Auction;
@@ -30,8 +30,7 @@ public class MakeBidTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
-    ZonedDateTime currentTime =
-        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
+    ZonedDateTime currentTime = Helpers.getCurrentTime(transactionContext.getFork());
     Schema schema = new Schema(transactionContext.getFork());
     PublicKey author = transactionContext.getAuthorPk();
 

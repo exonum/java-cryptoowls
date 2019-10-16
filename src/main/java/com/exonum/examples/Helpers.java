@@ -2,7 +2,11 @@ package com.exonum.examples;
 
 import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.common.hash.HashCode;
+import com.exonum.binding.core.storage.database.View;
+import com.exonum.binding.core.transaction.TransactionExecutionException;
+import com.exonum.binding.time.TimeSchema;
 import com.exonum.examples.cryptoowls.model.ModelProtos;
+import com.exonum.examples.transactions.ErrorCodes;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.ByteString;
 
@@ -11,6 +15,16 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 public class Helpers {
+  public static ZonedDateTime getCurrentTime(View view) throws TransactionExecutionException {
+    TimeSchema timeSchema = TimeSchema.newInstance(view);
+    if (!timeSchema.getTime().isPresent())
+      throw new TransactionExecutionException(
+          ErrorCodes.TIME_NOT_AVAILABLE,
+          "Time service not yet available");
+
+    return timeSchema.getTime().get();
+  }
+
   public static Timestamp zdtToTimestamp(ZonedDateTime value) {
     return Timestamp.newBuilder()
         .setSeconds(value.toEpochSecond())
