@@ -21,6 +21,7 @@ import com.exonum.binding.core.transaction.RawTransaction;
 import com.exonum.examples.transactions.CreateAuctionTx;
 import com.exonum.examples.transactions.CreateOwlTx;
 import com.exonum.examples.transactions.CreateUserTx;
+import com.exonum.examples.transactions.MakeBidTx;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.function.Function;
@@ -37,7 +38,8 @@ public final class TransactionConverter implements com.exonum.binding.core.servi
       ImmutableMap.of(
           CreateUserTx.ID, CreateUserTx::fromRawTransaction,
           CreateAuctionTx.ID, CreateAuctionTx::fromRawTransaction,
-          CreateOwlTx.ID, CreateOwlTx::fromRawTransaction
+          CreateOwlTx.ID, CreateOwlTx::fromRawTransaction,
+          MakeBidTx.ID, MakeBidTx::fromRawTransaction
       );
 
   @Override

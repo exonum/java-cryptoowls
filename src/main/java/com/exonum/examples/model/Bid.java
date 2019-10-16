@@ -24,4 +24,12 @@ public class Bid {
         .setValue(value)
         .build();
   }
+
+  public PublicKey getBidder() {
+    return bidder;
+  }
+
+  public long getValue() {
+    return value;
+  }
 }

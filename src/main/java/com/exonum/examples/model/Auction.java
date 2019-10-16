@@ -47,4 +47,20 @@ public class Auction {
         .setClosed(closed)
         .build();
   }
+
+  public boolean isClosed() {
+    return closed;
+  }
+
+  public PublicKey getOwner() {
+    return owner;
+  }
+
+  public long getStartPrice() {
+    return startPrice;
+  }
+
+  public void setBidsIndexHash(HashCode bidsIndexHash) {
+    this.bidsIndexHash = bidsIndexHash;
+  }
 }
