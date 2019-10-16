@@ -30,15 +30,13 @@ message CreateUser {
 
 // Transaction to create an owl. A new random owl created if mother and father
 // are not defined (zero identifiers passed).
-message MakeOwl {
+message CreateOwl {
     // Owl name.
     string name = 1;
     // Father identifier.
     Hash father_id = 2;
     // Mother identifier.
     Hash mother_id = 3;
-    // Timestamp. Is required to breed owls with the same identifiers.
-    google.protobuf.Timestamp seed = 4;
 }
 
 // Transaction to issue funds.

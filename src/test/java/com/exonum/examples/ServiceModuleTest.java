@@ -37,7 +37,7 @@ class ServiceModuleTest {
   @Test
   void testServiceInstantiation() {
     try (TestKit testKit = TestKit.forService(ServiceModule.class)) {
-      CryptoowlsService service = testKit.getService(CryptoowlsService.ID, CryptoowlsService.class);
+      Service service = testKit.getService(Service.ID, Service.class);
 
       // Check that genesis block was committed
       testKit.withSnapshot((view) -> {

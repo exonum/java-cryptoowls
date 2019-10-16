@@ -18,7 +18,7 @@ package com.exonum.examples;
 
 import com.exonum.binding.core.transaction.Transaction;
 import com.exonum.binding.core.transaction.RawTransaction;
-import com.exonum.binding.core.service.TransactionConverter;
+import com.exonum.examples.transactions.CreateOwlTx;
 import com.exonum.examples.transactions.CreateUserTx;
 import com.google.common.collect.ImmutableMap;
 
@@ -27,14 +27,16 @@ import java.util.function.Function;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
- * {@code MyTransactionConverter} converts raw transactions of {@link CryptoowlsService}
+ * {@code MyTransactionConverter} converts raw transactions of {@link Service}
  * into {@linkplain Transaction executable transactions} of this service.
  */
-public final class CryptoowlsTransactionConverter implements TransactionConverter {
+public final class TransactionConverter implements com.exonum.binding.core.service.TransactionConverter {
   private static final ImmutableMap<Short, Function<RawTransaction, Transaction>>
       TRANSACTION_FACTORIES =
       ImmutableMap.of(
-          CreateUserTx.ID, CreateUserTx::fromRawTransaction);
+          CreateUserTx.ID, CreateUserTx::fromRawTransaction,
+          CreateOwlTx.ID, CreateOwlTx::fromRawTransaction
+      );
 
   @Override
   public Transaction toTransaction(RawTransaction rawTransaction) {
@@ -49,9 +51,9 @@ public final class CryptoowlsTransactionConverter implements TransactionConverte
 
   static void checkServiceId(RawTransaction transaction) {
     short serviceId = transaction.getServiceId();
-    checkArgument(serviceId == CryptoowlsService.ID,
+    checkArgument(serviceId == Service.ID,
         "Wrong service id (%s), must be %s",
-        serviceId, CryptoowlsService.ID);
+        serviceId, Service.ID);
   }
 
 }

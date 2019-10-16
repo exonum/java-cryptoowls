@@ -17,20 +17,18 @@
 package com.exonum.examples;
 
 import com.exonum.binding.core.service.AbstractServiceModule;
-import com.exonum.binding.core.service.Service;
-import com.exonum.binding.core.service.TransactionConverter;
 import com.google.inject.Singleton;
 import org.pf4j.Extension;
 
 /**
- * A service module defines bindings required to create an instance of {@link CryptoowlsService}.
+ * A service module defines bindings required to create an instance of {@link Service}.
  */
 @Extension
 public final class ServiceModule extends AbstractServiceModule {
 
   @Override
   protected void configure() {
-    bind(Service.class).to(CryptoowlsService.class).in(Singleton.class);
-    bind(TransactionConverter.class).to(CryptoowlsTransactionConverter.class);
+    bind(com.exonum.binding.core.service.Service.class).to(Service.class).in(Singleton.class);
+    bind(com.exonum.binding.core.service.TransactionConverter.class).to(TransactionConverter.class);
   }
 }

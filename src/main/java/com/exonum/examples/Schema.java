@@ -19,13 +19,10 @@ package com.exonum.examples;
 import com.exonum.binding.common.crypto.PublicKey;
 import com.exonum.binding.common.hash.HashCode;
 import com.exonum.binding.common.serialization.StandardSerializers;
-import com.exonum.binding.core.service.Schema;
 import com.exonum.binding.core.storage.database.View;
-import com.exonum.binding.core.storage.indices.ListIndex;
-import com.exonum.binding.core.storage.indices.ListIndexProxy;
-import com.exonum.binding.core.storage.indices.MapIndex;
-import com.exonum.binding.core.storage.indices.MapIndexProxy;
-import com.exonum.examples.cryptoowls.model.ModelProtos.*;
+import com.exonum.binding.core.storage.indices.*;
+import com.exonum.examples.cryptoowls.model.ModelProtos;
+import com.google.common.collect.ImmutableList;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,43 +30,50 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@code MySchema} provides access to the tables of {@link CryptoowlsService},
+ * {@code MySchema} provides access to the tables of {@link Service},
  * given a database state: a {@link View}.
  *
  * @see <a href="https://exonum.com/doc/version/0.12/architecture/storage/#table-types">Exonum table types.</a>
  */
-public final class CryptoowlsSchema implements Schema {
+public final class Schema implements com.exonum.binding.core.service.Schema {
 
   private final View view;
 
-  public CryptoowlsSchema(View view) {
+  public Schema(View view) {
     this.view = checkNotNull(view);
   }
 
   @Override
   public List<HashCode> getStateHashes() {
-    return Collections.emptyList();
+    return ImmutableList.of(getOwls().getIndexHash());
   }
 
-  public ListIndex<CryptoOwl> getOwls() {
+  public ProofMapIndexProxy<HashCode, ModelProtos.CryptoOwl> getOwls() {
     String indexName = fullIndexName("owls");
-    return ListIndexProxy.newInstance(indexName, view,
-        StandardSerializers.protobuf(CryptoOwl.class));
+    return ProofMapIndexProxy.newInstance(indexName, view,
+        StandardSerializers.hash(),
+        StandardSerializers.protobuf(ModelProtos.CryptoOwl.class));
   }
 
-  public MapIndex<PublicKey, User> getUsers() {
+  public ValueSetIndexProxy<HashCode> getUserOwls(PublicKey user) {
+    String indexName = fullIndexName("userOwls");
+    return ValueSetIndexProxy.newInGroupUnsafe(indexName, user.toBytes(),
+        view, StandardSerializers.hash());
+  }
+
+  public MapIndex<PublicKey, ModelProtos.User> getUsers() {
     String indexName = fullIndexName("users");
     return MapIndexProxy.newInstance(indexName, view,
-        StandardSerializers.publicKey(), StandardSerializers.protobuf(User.class));
+        StandardSerializers.publicKey(), StandardSerializers.protobuf(ModelProtos.User.class));
   }
 
-  public ListIndex<Auction> getAuctions() {
+  public ListIndex<ModelProtos.Auction> getAuctions() {
     String indexName = fullIndexName("auctions");
     return ListIndexProxy.newInstance(indexName, view,
-        StandardSerializers.protobuf(Auction.class));
+        StandardSerializers.protobuf(ModelProtos.Auction.class));
   }
 
   private String fullIndexName(String name) {
-    return CryptoowlsService.NAME.replace('-', '_') + "_" + name;
+    return Service.NAME.replace('-', '_') + "_" + name;
   }
 }
