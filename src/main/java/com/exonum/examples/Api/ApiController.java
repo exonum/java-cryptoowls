@@ -10,6 +10,7 @@ import io.vertx.core.MultiMap;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
@@ -24,7 +25,27 @@ public class ApiController {
 
   public void mountApi(Router router) {
     router.route("/v1/user").handler(this::getUser);
+    router.route("/v1/users").handler(this::getUsers);
     router.route().failureHandler(this::failureHandler);
+  }
+
+  private void getUsers(RoutingContext routingContext) {
+    ArrayList<UserDTO> response = node.withSnapshot(view -> {
+      ArrayList<UserDTO> users = new ArrayList<>();
+      Schema schema = new Schema(view);
+      schema.getUsers().entries().forEachRemaining((entry) -> {
+        User user = new User(entry.getValue());
+        String name = user.getName();
+        long balance = user.getBalance();
+        long reserved = user.getReserved();
+        users.add(new UserDTO(entry.getKey(), name, balance, reserved));
+      });
+      return users;
+    });
+
+    routingContext.response()
+        .putHeader("Content-Type", "application/json")
+        .end(JsonSerializer.json().toJson(response));
   }
 
   private void getUser(RoutingContext routingContext) {
