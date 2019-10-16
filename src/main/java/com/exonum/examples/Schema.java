@@ -23,6 +23,7 @@ import com.exonum.binding.core.storage.database.View;
 import com.exonum.binding.core.storage.indices.*;
 import com.exonum.examples.cryptoowls.model.ModelProtos;
 import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.Ints;
 
 import java.util.Collections;
 import java.util.List;
@@ -67,10 +68,22 @@ public final class Schema implements com.exonum.binding.core.service.Schema {
         StandardSerializers.publicKey(), StandardSerializers.protobuf(ModelProtos.User.class));
   }
 
-  public ListIndex<ModelProtos.Auction> getAuctions() {
+  public ProofListIndexProxy<ModelProtos.Auction> getAuctions() {
     String indexName = fullIndexName("auctions");
-    return ListIndexProxy.newInstance(indexName, view,
+    return ProofListIndexProxy.newInstance(indexName, view,
         StandardSerializers.protobuf(ModelProtos.Auction.class));
+  }
+
+  public ProofListIndexProxy<ModelProtos.Bid> getAuctionBids(int auctionId) {
+    String indexName = fullIndexName("auctionBids");
+    return ProofListIndexProxy.newInGroupUnsafe(indexName, Ints.toByteArray(auctionId), view,
+        StandardSerializers.protobuf(ModelProtos.Bid.class));
+  }
+
+  public MapIndex<HashCode, Integer> getOwlAuctions() {
+    String indexName = fullIndexName("owlAuctions");
+    return MapIndexProxy.newInstance(indexName, view,
+        StandardSerializers.hash(), StandardSerializers.fixed32());
   }
 
   private String fullIndexName(String name) {
