@@ -23,7 +23,7 @@ public class ApiController {
   }
 
   public void mountApi(Router router) {
-    router.route("v1/user").handler(this::getUser);
+    router.route("/v1/user").handler(this::getUser);
     router.route().failureHandler(this::failureHandler);
   }
 

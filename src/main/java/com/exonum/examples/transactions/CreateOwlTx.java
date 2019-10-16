@@ -46,6 +46,8 @@ public class CreateOwlTx implements Transaction {
     TimeSchema timeSchema = TimeSchema.newInstance(transactionContext.getFork());
     ZonedDateTime currentTime = timeSchema.getTime().get();
 
+    schema.closeAuctionsIfNeeded(currentTime);
+
     if (fatherId.equals(motherId))
       throw new TransactionExecutionException(ErrorCodes.IDENTICAL_PARENTS);
 

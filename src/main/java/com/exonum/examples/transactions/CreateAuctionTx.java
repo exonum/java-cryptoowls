@@ -33,8 +33,12 @@ public class CreateAuctionTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
+    ZonedDateTime currentTime =
+        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
     PublicKey owner = transactionContext.getAuthorPk();
     Schema schema = new Schema(transactionContext.getFork());
+
+    schema.closeAuctionsIfNeeded(currentTime);
 
     if (schema.getUsers().get(owner) == null)
       throw new TransactionExecutionException(ErrorCodes.USER_NOT_FOUND);
@@ -49,11 +53,10 @@ public class CreateAuctionTx implements Transaction {
     if (schema.getOwlAuctions().get(owlHash) != null)
       throw new TransactionExecutionException(ErrorCodes.OWL_ALREADY_AUCTIONED);
 
-    ZonedDateTime startedAt = TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
     HashCode bidsIndexHash = HashCode.fromBytes(new byte[32]);
 
     Auction auction =
-        new Auction(owner, owlHash, startPrice, duration, startedAt, bidsIndexHash, false);
+        new Auction(owner, owlHash, startPrice, duration, currentTime, bidsIndexHash, false);
 
     int auctionId = Iterators.size(schema.getAuctions().iterator());
     schema.getAuctions().add(auction.toProtobuf());

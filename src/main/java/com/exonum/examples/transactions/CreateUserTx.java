@@ -27,18 +27,21 @@ public class CreateUserTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
+    ZonedDateTime currentTime =
+        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
     PublicKey userPK = transactionContext.getAuthorPk();
 
     Schema schema = new Schema(transactionContext.getFork());
 
-    if (schema.getUsers().get(userPK) != null)
+    schema.closeAuctionsIfNeeded(currentTime);
+
+    if (schema.getUsers().get(userPK) != null) {
       throw new TransactionExecutionException(ErrorCodes.ALREADY_REGISTERED);
+    }
 
     User user = new User(userName);
     schema.getUsers().put(userPK, user.toProtobuf());
 
-    ZonedDateTime currentTime =
-        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
 
     String initialFatherName = String.format("%s's Adam", userName);
     String initialMotherName = String.format("%s's Eve", userName);

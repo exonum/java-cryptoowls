@@ -15,8 +15,8 @@ import java.util.Random;
 public class Owl {
   private static final int BREEDING_TIMEOUT = 30;
   private final String name;
-  private final PublicKey owner;
   private final int DNA;
+  private PublicKey owner;
   private ZonedDateTime lastBreeding;
 
   public Owl(String name, PublicKey owner, HashCode uniqueHash, ZonedDateTime lastBreeding) {
@@ -96,5 +96,9 @@ public class Owl {
 
   public boolean isBreedingPossible(ZonedDateTime currentTime) {
     return (currentTime.toEpochSecond() - lastBreeding.toEpochSecond()) > BREEDING_TIMEOUT;
+  }
+
+  public void setOwner(PublicKey newOwner) {
+    owner = newOwner;
   }
 }

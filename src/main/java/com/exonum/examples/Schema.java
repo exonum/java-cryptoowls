@@ -22,9 +22,15 @@ import com.exonum.binding.common.serialization.StandardSerializers;
 import com.exonum.binding.core.storage.database.View;
 import com.exonum.binding.core.storage.indices.*;
 import com.exonum.examples.cryptoowls.model.ModelProtos;
+import com.exonum.examples.model.Auction;
+import com.exonum.examples.model.Bid;
+import com.exonum.examples.model.Owl;
+import com.exonum.examples.model.User;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Ints;
 
+import java.time.ZonedDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -83,6 +89,44 @@ public final class Schema implements com.exonum.binding.core.service.Schema {
     String indexName = fullIndexName("owlAuctions");
     return MapIndexProxy.newInstance(indexName, view,
         StandardSerializers.hash(), StandardSerializers.fixed32());
+  }
+
+  public void closeAuctionsIfNeeded(ZonedDateTime currentTime) {
+    Iterator<Integer> openAuctionIds = getOwlAuctions().values();
+    while (openAuctionIds.hasNext()) {
+      Integer auctionId = openAuctionIds.next();
+      Auction auction = new Auction(getAuctions().get(auctionId));
+      if (auction.endsAt().toEpochSecond() <= currentTime.toEpochSecond())
+        closeAuction(auctionId);
+    }
+  }
+
+  private void closeAuction(int auctionId) {
+    Auction auction = new Auction(getAuctions().get(auctionId));
+    Bid winnerBid;
+    try {
+      winnerBid = new Bid(getAuctionBids(auctionId).getLast());
+    } catch (Exception e) {
+      return;
+    }
+    // Transfer money
+    PublicKey winnerPK = winnerBid.getBidder();
+    User winner = new User(getUsers().get(winnerPK));
+    winner.confirmBid(winnerBid.getValue());
+    PublicKey auctionOwnerPK = auction.getOwner();
+    User seller = new User(getUsers().get(auctionOwnerPK));
+    seller.increaseBalance(winnerBid.getValue());
+    // Transfer owl
+    HashCode owlHash = auction.getOwlHash();
+    getUserOwls(auctionOwnerPK).remove(owlHash);
+    getUserOwls(winnerPK).add(owlHash);
+    Owl owl = new Owl(getOwls().get(owlHash));
+    owl.setOwner(winnerPK);
+    getOwls().put(owlHash, owl.toProtobuf());
+    // Close auction
+    getOwlAuctions().remove(owlHash);
+    auction.close();
+    getAuctions().set(auctionId, auction.toProtobuf());
   }
 
   private String fullIndexName(String name) {

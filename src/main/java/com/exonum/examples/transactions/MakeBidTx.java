@@ -8,11 +8,14 @@ import com.exonum.binding.core.transaction.RawTransaction;
 import com.exonum.binding.core.transaction.Transaction;
 import com.exonum.binding.core.transaction.TransactionContext;
 import com.exonum.binding.core.transaction.TransactionExecutionException;
+import com.exonum.binding.time.TimeSchema;
 import com.exonum.examples.Schema;
 import com.exonum.examples.cryptoowls.transactions.TransactionsProtos;
 import com.exonum.examples.model.Auction;
 import com.exonum.examples.model.Bid;
 import com.exonum.examples.model.User;
+
+import java.time.ZonedDateTime;
 
 public class MakeBidTx implements Transaction {
   public static final short ID = 3;
@@ -27,8 +30,12 @@ public class MakeBidTx implements Transaction {
 
   @Override
   public void execute(TransactionContext transactionContext) throws TransactionExecutionException {
+    ZonedDateTime currentTime =
+        TimeSchema.newInstance(transactionContext.getFork()).getTime().get();
     Schema schema = new Schema(transactionContext.getFork());
     PublicKey author = transactionContext.getAuthorPk();
+
+    schema.closeAuctionsIfNeeded(currentTime);
 
     if (schema.getUsers().get(author) == null)
       throw new TransactionExecutionException(ErrorCodes.USER_NOT_FOUND);

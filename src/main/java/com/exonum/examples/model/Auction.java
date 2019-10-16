@@ -5,6 +5,7 @@ import com.exonum.binding.common.hash.HashCode;
 import com.exonum.examples.Helpers;
 import com.exonum.examples.cryptoowls.model.ModelProtos;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 public class Auction {
@@ -62,5 +63,17 @@ public class Auction {
 
   public void setBidsIndexHash(HashCode bidsIndexHash) {
     this.bidsIndexHash = bidsIndexHash;
+  }
+
+  public ZonedDateTime endsAt() {
+    return startedAt.plus(Duration.ofSeconds(duration));
+  }
+
+  public HashCode getOwlHash() {
+    return owlHash;
+  }
+
+  public void close() {
+    closed = true;
   }
 }

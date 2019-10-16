@@ -43,6 +43,11 @@ public class User {
     this.reserved -= amount;
   }
 
+  public void confirmBid(long amount) {
+    assert amount >= 0;
+    this.reserved -= amount;
+  }
+
   public ModelProtos.User toProtobuf() {
     return ModelProtos.User.newBuilder()
         .setName(name)
