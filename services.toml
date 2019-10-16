@@ -1,0 +1,4 @@
+system_services = ["configuration", "time"]
+
+[user_services]
+java-cryptoowls = "/Users/ilyabogdanov/projects/cryptoowls/target/cryptoowls-1.0.0-artifact.jar"
