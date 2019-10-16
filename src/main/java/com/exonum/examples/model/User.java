@@ -54,4 +54,12 @@ public class User {
   public long getBalance() {
     return balance;
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public long getReserved() {
+    return reserved;
+  }
 }

@@ -17,10 +17,10 @@
 package com.exonum.examples;
 
 import com.exonum.binding.core.service.AbstractService;
-import com.exonum.binding.core.service.Node;
 import com.exonum.binding.core.service.TransactionConverter;
 import com.exonum.binding.core.storage.database.Fork;
 import com.exonum.binding.core.storage.database.View;
+import com.exonum.examples.Api.ApiController;
 import com.google.inject.Inject;
 import io.vertx.ext.web.Router;
 
@@ -29,7 +29,7 @@ import java.util.Optional;
 public final class Service extends AbstractService {
 
   public static final short ID = 42;
-  static final String NAME = "my-service";
+  static final String NAME = "java-cryptoowls";
   static final String INITIAL_SERVICE_CONFIGURATION = "{ \"version\": 0.1 }";
 
   @Inject
@@ -48,6 +48,8 @@ public final class Service extends AbstractService {
   }
 
   @Override
-  public void createPublicApiHandlers(Node node, Router router) {
+  public void createPublicApiHandlers(com.exonum.binding.core.service.Node node, Router router) {
+    ApiController controller = new ApiController(node);
+    controller.mountApi(router);
   }
 }

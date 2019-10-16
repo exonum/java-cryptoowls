@@ -25,7 +25,6 @@ import com.exonum.examples.cryptoowls.model.ModelProtos;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Ints;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;

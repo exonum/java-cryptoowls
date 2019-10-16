@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAmount;
 import java.util.Iterator;
 
 class CreateOwlTest {
