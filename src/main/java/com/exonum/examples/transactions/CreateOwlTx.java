@@ -41,7 +41,6 @@ public class CreateOwlTx implements Transaction {
     ZonedDateTime currentTime = Helpers.getCurrentTime(transactionContext.getFork());
     PublicKey owner = transactionContext.getAuthorPk();
     Schema schema = new Schema(transactionContext.getFork());
-    HashCode uniqueHash = schema.getOwls().getIndexHash();
 
     schema.closeAuctionsIfNeeded(currentTime);
 
@@ -68,6 +67,7 @@ public class CreateOwlTx implements Transaction {
         motherOwl.isBreedingImpossible(currentTime))
       throw new TransactionExecutionException(ErrorCodes.TOO_EARLY_FOR_BREEDING);
 
+    HashCode uniqueHash = schema.getOwls().getIndexHash();
     Owl owl = new Owl(name,
         transactionContext.getAuthorPk(),
         fatherOwl.getDNA(),

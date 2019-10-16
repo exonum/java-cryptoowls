@@ -13,6 +13,7 @@ import java.util.BitSet;
 import java.util.Random;
 
 public class Owl {
+  // In seconds
   private static final int BREEDING_TIMEOUT = 30;
   private final String name;
   private final int DNA;

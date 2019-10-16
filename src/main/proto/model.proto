@@ -31,7 +31,9 @@ message CryptoOwl {
     string name = 1;
     // DNA.
     fixed32 dna = 2;
+    // Owner's public key
     PublicKey owner = 3;
+    // Time of last breeding
     google.protobuf.Timestamp last_breeding = 4;
 }
 

@@ -12,6 +12,7 @@ public class Auction {
   private PublicKey owner;
   private HashCode owlHash;
   private long startPrice;
+  // In seconds
   private long duration;
   private ZonedDateTime startedAt;
   private HashCode bidsIndexHash;
@@ -49,6 +50,14 @@ public class Auction {
         .build();
   }
 
+  public void setBidsIndexHash(HashCode bidsIndexHash) {
+    this.bidsIndexHash = bidsIndexHash;
+  }
+
+  public ZonedDateTime endsAt() {
+    return startedAt.plus(Duration.ofSeconds(duration));
+  }
+
   public boolean isClosed() {
     return closed;
   }
@@ -59,14 +68,6 @@ public class Auction {
 
   public long getStartPrice() {
     return startPrice;
-  }
-
-  public void setBidsIndexHash(HashCode bidsIndexHash) {
-    this.bidsIndexHash = bidsIndexHash;
-  }
-
-  public ZonedDateTime endsAt() {
-    return startedAt.plus(Duration.ofSeconds(duration));
   }
 
   public HashCode getOwlHash() {
