@@ -8,7 +8,6 @@ import com.exonum.binding.core.transaction.RawTransaction;
 import com.exonum.binding.core.transaction.Transaction;
 import com.exonum.binding.core.transaction.TransactionContext;
 import com.exonum.binding.core.transaction.TransactionExecutionException;
-import com.exonum.binding.time.TimeSchema;
 import com.exonum.examples.Helpers;
 import com.exonum.examples.model.Owl;
 import com.exonum.examples.Schema;
@@ -26,7 +25,7 @@ public class CreateOwlTx implements Transaction {
   private final HashCode fatherId;
   private final HashCode motherId;
 
-  public CreateOwlTx(String name, HashCode fatherId, HashCode motherId) {
+  private CreateOwlTx(String name, HashCode fatherId, HashCode motherId) {
     this.name = name;
     this.fatherId = fatherId;
     this.motherId = motherId;
@@ -65,8 +64,8 @@ public class CreateOwlTx implements Transaction {
     if (ownerUser.getBalance() < BREEDING_PRICE)
       throw new TransactionExecutionException(ErrorCodes.INSUFFICIENT_FUNDS);
 
-    if (!fatherOwl.isBreedingPossible(currentTime) ||
-        !motherOwl.isBreedingPossible(currentTime))
+    if (fatherOwl.isBreedingImpossible(currentTime) ||
+        motherOwl.isBreedingImpossible(currentTime))
       throw new TransactionExecutionException(ErrorCodes.TOO_EARLY_FOR_BREEDING);
 
     Owl owl = new Owl(name,
@@ -76,6 +75,9 @@ public class CreateOwlTx implements Transaction {
         uniqueHash,
         currentTime
     );
+
+    ownerUser.decreaseBalance(BREEDING_PRICE);
+    schema.getUsers().put(owner, ownerUser.toProtobuf());
 
     HashCode owlHash = owl.getHash();
     schema.getOwls().put(owlHash, owl.toProtobuf());

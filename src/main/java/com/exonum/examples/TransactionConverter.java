@@ -53,7 +53,7 @@ public final class TransactionConverter implements com.exonum.binding.core.servi
     }).apply(rawTransaction);
   }
 
-  static void checkServiceId(RawTransaction transaction) {
+  private static void checkServiceId(RawTransaction transaction) {
     short serviceId = transaction.getServiceId();
     checkArgument(serviceId == Service.ID,
         "Wrong service id (%s), must be %s",

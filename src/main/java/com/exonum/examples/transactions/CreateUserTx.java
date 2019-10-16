@@ -19,10 +19,10 @@ import java.time.ZonedDateTime;
 
 public class CreateUserTx implements Transaction {
   public static final short ID = 0;
-  private static final long INITIAL_USER_BALANCE = 100;
+
   private final String userName;
 
-  public CreateUserTx(String userName) {
+  private CreateUserTx(String userName) {
     this.userName = userName;
   }
 

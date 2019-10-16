@@ -23,7 +23,7 @@ public class MakeBidTx implements Transaction {
   private int auctionId;
   private long value;
 
-  public MakeBidTx(int auctionId, long value) {
+  private MakeBidTx(int auctionId, long value) {
     this.auctionId = auctionId;
     this.value = value;
   }
@@ -67,13 +67,13 @@ public class MakeBidTx implements Transaction {
     if (bidToBeat >= value)
       throw new TransactionExecutionException(ErrorCodes.BID_TOO_LOW);
 
-    // release balance of previous bidder
+    // release balance of previous bidder (if there is some)
     try {
       Bid bid = new Bid(schema.getAuctionBids(auctionId).getLast());
       User bidder = new User(schema.getUsers().get(bid.getBidder()));
       bidder.releaseMoney(bid.getValue());
       schema.getUsers().put(bid.getBidder(), bidder.toProtobuf());
-    } catch (Exception e) {}
+    } catch (Exception ignored) {}
 
     user.reserveMoney(value);
     schema.getUsers().put(author, user.toProtobuf());

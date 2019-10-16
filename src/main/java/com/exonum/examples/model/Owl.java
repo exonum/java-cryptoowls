@@ -94,8 +94,8 @@ public class Owl {
         .hash();
   }
 
-  public boolean isBreedingPossible(ZonedDateTime currentTime) {
-    return (currentTime.toEpochSecond() - lastBreeding.toEpochSecond()) > BREEDING_TIMEOUT;
+  public boolean isBreedingImpossible(ZonedDateTime currentTime) {
+    return (currentTime.toEpochSecond() - lastBreeding.toEpochSecond()) <= BREEDING_TIMEOUT;
   }
 
   public void setOwner(PublicKey newOwner) {

@@ -30,7 +30,7 @@ public final class Service extends AbstractService {
 
   public static final short ID = 42;
   static final String NAME = "java-cryptoowls";
-  static final String INITIAL_SERVICE_CONFIGURATION = "{ \"version\": 0.1 }";
+  private static final String INITIAL_SERVICE_CONFIGURATION = "{ \"version\": 0.1 }";
 
   @Inject
   public Service(TransactionConverter transactionConverter) {

@@ -25,7 +25,7 @@ public class CreateAuctionTx implements Transaction {
   private final long startPrice;
   private final long duration;
 
-  public CreateAuctionTx(HashCode owlHash, long startPrice, long duration) {
+  private CreateAuctionTx(HashCode owlHash, long startPrice, long duration) {
     this.owlHash = owlHash;
     this.startPrice = startPrice;
     this.duration = duration;

@@ -18,8 +18,7 @@ public class Helpers {
   public static ZonedDateTime getCurrentTime(View view) throws TransactionExecutionException {
     TimeSchema timeSchema = TimeSchema.newInstance(view);
     if (!timeSchema.getTime().isPresent())
-      throw new TransactionExecutionException(
-          ErrorCodes.TIME_NOT_AVAILABLE,
+      throw new TransactionExecutionException(ErrorCodes.TIME_NOT_AVAILABLE,
           "Time service not yet available");
 
     return timeSchema.getTime().get();
