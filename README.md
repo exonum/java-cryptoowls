@@ -17,6 +17,10 @@ mvn package
 
 to run the node.
 
+### Other languages
+
+- [Rust](https://github.com/exonum/exonum-cryptoowls)
+
 ### License
 
 This project is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
